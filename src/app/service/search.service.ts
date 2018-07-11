@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
+import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs/internal/Observable';
 
 export class SearchItem {
   constructor(
@@ -10,7 +12,6 @@ export class SearchItem {
     public artistId: string
   ) {}
 }
-
 
 @Injectable()
 export class SearchService {
@@ -23,33 +24,20 @@ export class SearchService {
     this.loading = false;
   }
 
-  search(term: string) {
-    const promise = new Promise((resolve, reject) => {
-      const apiURL = `${this.apiRoot}?term=${term}&media=music&limit=20`;
-      this.http
-        .get(apiURL)
-        .toPromise()
-        .then(
-          (res) => {
-            // Success
-            this.results = res.json().results.map((item) => {
-              return new SearchItem(
-                item.trackName,
-                item.artistName,
-                item.trackViewUrl,
-                item.artworkUrl30,
-                item.artistId
-              );
-            });
-            // this.results = res.json().results;
-            resolve();
-          },
-          (msg) => {
-            // Error
-            reject(msg);
-          }
-        );
-    });
-    return promise;
+  search(term: string): Observable<SearchItem[]> {
+    const apiURL = `${this.apiRoot}?term=${term}&media=music&limit=20`;
+    return this.http.get(apiURL).pipe(
+      map((res) => {
+        return res.json().results.map((item) => {
+          return new SearchItem(
+            item.trackName,
+            item.artistName,
+            item.trackViewUrl,
+            item.artworkUrl30,
+            item.artistId
+          );
+        });
+      })
+    );
   }
 }
