@@ -1,6 +1,6 @@
-<form class="form-inline">
-  <div class="form-group">
-    <input type="search" class="form-control" placeholder="Enter search string" [formControl]="searchField">
+<form class="card p-2">
+  <div class="input-group">
+    <input type="search" class="form-control" placeholder="Buscar" [formControl]="searchField">
   </div>
 </form>
 <hr/>
@@ -9,10 +9,14 @@
   <p class="lead" *ngIf="loading">Loading...</p>
 </div>
 
-<ul class="list-group">
+<ul class="list-group mb-3">
+
   <li class="list-group-item" *ngFor="let track of results | async">
-    <img src="{{track.thumbnail}}">
-    <a target="_blank" href="{{track.link}}">{{ track.track }}
-    </a>
+    <div class="media lh-condensed">
+      <img class="align-self-start mr-3" src="{{track.thumbnail}}" alt="Generic placeholder image">
+      <div class="media-body">
+        <a target="_blank" class="badge badge-light wrap" href="{{track.link}}">{{track.track}}</a>
+      </div>
+    </div>
   </li>
 </ul>

@@ -5,7 +5,7 @@ import { AppComponent } from './app.component';
 import { SearchEntryComponent } from './component/search-entry/search-entry.component';
 import { SearchService } from 'src/app/service/search.service';
 import { JsonpModule, HttpModule } from '@angular/http';
-import { ReactiveFormsModule, FormsModule, } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [AppComponent, SearchEntryComponent],
