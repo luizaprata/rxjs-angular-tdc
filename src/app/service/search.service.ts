@@ -2,16 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs/internal/Observable';
-
-export class SearchItem {
-  constructor(
-    public track: string,
-    public artist: string,
-    public link: string,
-    public thumbnail: string,
-    public artistId: string
-  ) {}
-}
+import SearchItem from '../model/SearchItem';
 
 @Injectable()
 export class SearchService {
