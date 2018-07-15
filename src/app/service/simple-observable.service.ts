@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { from } from 'rxjs';
+import { map, filter } from 'rxjs/operators';
 
 export class MyObserver {
   next(value) {
@@ -29,8 +30,9 @@ export class SimpleObservableService {
     //  observer.complete();
     //});
 
-    let source = from(numbers);
-
+    let source = from(numbers)
+      .pipe(filter((value) => value > 30))
+      .pipe(map((value) => value * 2));
     source.subscribe(
       (value) => console.log('next', value),
       (e) => console.log('error', e),
