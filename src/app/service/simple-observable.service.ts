@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Observable, Observer } from 'rxjs';
+import { from } from 'rxjs';
 
-export class MyObserver implements Observer<number> {
+export class MyObserver {
   next(value) {
     console.log('next', value);
   }
@@ -19,11 +19,22 @@ export class MyObserver implements Observer<number> {
 export class SimpleObservableService {
   constructor() {
     let numbers = [10, 31, 42];
-    let source = Observable.create((observer) => {
-      for (let n of numbers) {
-        observer.next(n);
-      }
-    });
-    source.subscribe(new MyObserver());
+    //let source = Observable.create((observer) => {
+    //  for (let n of numbers) {
+    //    if (n === 31) {
+    //      observer.error('Deu ruim!');
+    //    }
+    //    observer.next(n);
+    //  }
+    //  observer.complete();
+    //});
+
+    let source = from(numbers);
+
+    source.subscribe(
+      (value) => console.log('next', value),
+      (e) => console.log('error', e),
+      () => console.log('complete')
+    );
   }
 }
