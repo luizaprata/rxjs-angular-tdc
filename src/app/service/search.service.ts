@@ -1,17 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
-import {
-  map,
-  tap,
-  retryWhen,
-  scan,
-  takeWhile,
-  delay,
-  catchError
-} from 'rxjs/operators';
+import { map, tap, retryWhen, scan, takeWhile, delay } from 'rxjs/operators';
 import { Observable } from 'rxjs/internal/Observable';
 import SearchItem from '../model/SearchItem';
-import { ReplaySubject, BehaviorSubject, empty } from 'rxjs';
+import { ReplaySubject, BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class SearchService {
@@ -26,7 +18,6 @@ export class SearchService {
 
   retryStrategy(term) {
     let _self = this;
-
     return function(error) {
       return error
         .pipe(

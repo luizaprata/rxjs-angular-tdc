@@ -10,7 +10,6 @@ import { Observable } from 'rxjs/internal/Observable';
 import { FormControl } from '@angular/forms';
 import { SearchService } from '../../service/search.service';
 import SearchItem from '../../model/SearchItem';
-import { TouchSequence } from 'selenium-webdriver';
 
 @Component({
   selector: 'app-search-entry',
@@ -33,9 +32,8 @@ export class SearchEntryComponent implements OnInit {
     if (this.logSubscription) this.logSubscription.unsubscribe();
     this.logRequests = '';
   }
-
   addLog(log) {
-    this.logRequests = this.logRequests.concat(`\n${log}`);
+    this.logRequests = `${log}\n${this.logRequests}`;
   }
   onLogRequests() {
     this.showLogRequests = !this.showLogRequests;
