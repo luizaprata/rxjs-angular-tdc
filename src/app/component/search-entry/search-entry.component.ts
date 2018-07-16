@@ -3,7 +3,8 @@ import {
   debounceTime,
   distinctUntilChanged,
   tap,
-  switchMap
+  switchMap,
+  filter
 } from 'rxjs/operators';
 import { Observable } from 'rxjs/internal/Observable';
 import { FormControl } from '@angular/forms';
@@ -27,8 +28,9 @@ export class SearchEntryComponent implements OnInit {
     this.results = this.searchField.valueChanges
       .pipe(debounceTime(400))
       .pipe(distinctUntilChanged())
-      .pipe(tap((_) => this.loading = true))
+      .pipe(tap((_) => (this.loading = true)))
       .pipe(switchMap((term) => this.itunes.search(term)))
-      .pipe(tap((_) => this.loading = false));
+      .pipe(tap((_) => (this.loading = false)));
   }
+  
 }

@@ -38,5 +38,6 @@ export class SimpleObservableService {
       (e) => console.log('error', e),
       () => console.log('complete')
     );
+    
   }
 }
