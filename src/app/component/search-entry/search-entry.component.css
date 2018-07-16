@@ -1,3 +1,6 @@
-.badge{
-    white-space: normal;
+.badge {
+  white-space: normal;
+}
+pre {
+  max-width: 350px;
 }

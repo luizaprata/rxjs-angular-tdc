@@ -10,6 +10,7 @@ import { Observable } from 'rxjs/internal/Observable';
 import { FormControl } from '@angular/forms';
 import { SearchService } from '../../service/search.service';
 import SearchItem from '../../model/SearchItem';
+import { TouchSequence } from 'selenium-webdriver';
 
 @Component({
   selector: 'app-search-entry',
@@ -20,8 +21,29 @@ export class SearchEntryComponent implements OnInit {
   private loading: boolean = false;
   private results: Observable<SearchItem[]>;
   private searchField: FormControl;
+  private showLogRequests: boolean = false;
+  private logRequests: string = 'ola';
+  private logSubscription;
 
-  constructor(private itunes: SearchService) {}
+  constructor(private itunes: SearchService) {
+    this.setLogStatus();
+  }
+
+  setLogStatus() {
+    if (this.logSubscription) this.logSubscription.unsubscribe();
+    this.logRequests = '';
+  }
+
+  addLog(log) {
+    this.logRequests = this.logRequests.concat(`\n${log}`);
+  }
+  onLogRequests() {
+    this.showLogRequests = !this.showLogRequests;
+    this.setLogStatus();
+    this.logSubscription = this.itunes.logTerm.subscribe(
+      this.addLog.bind(this)
+    );
+  }
 
   ngOnInit() {
     this.searchField = new FormControl();
@@ -32,5 +54,4 @@ export class SearchEntryComponent implements OnInit {
       .pipe(switchMap((term) => this.itunes.search(term)))
       .pipe(tap((_) => (this.loading = false)));
   }
-  
 }

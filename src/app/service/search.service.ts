@@ -1,6 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
-import { map, tap, retryWhen, scan, takeWhile, delay } from 'rxjs/operators';
+import {
+  map,
+  tap,
+  retryWhen,
+  scan,
+  takeWhile,
+  delay,
+  catchError
+} from 'rxjs/operators';
 import { Observable } from 'rxjs/internal/Observable';
 import SearchItem from '../model/SearchItem';
 import { ReplaySubject, BehaviorSubject, empty } from 'rxjs';
@@ -16,14 +24,14 @@ export class SearchService {
     this.results = [];
   }
 
-  retryStrategy(apiURL) {
+  retryStrategy(term) {
     let _self = this;
 
     return function(error) {
       return error
         .pipe(
           scan((acc, value) => {
-            _self.addLog(`${apiURL} : falhou tentativa ${acc + 1} de 3`);
+            _self.addLog(`${term} : falhou tentativa ${acc + 1} de 3`);
             return acc + 1;
           }, 0)
         )
@@ -39,10 +47,10 @@ export class SearchService {
 
   search(term: string): Observable<SearchItem[]> {
     const apiURL = `${this.apiRoot}?term=${term}&media=music&limit=20`;
-    this.addLog(`${apiURL} : start request`);
+    this.addLog(`${term} : start request`);
     return this.http
       .get(apiURL)
-      .pipe(tap((_) => this.addLog(`${apiURL} : ok`)))
+      .pipe(tap((_) => this.addLog(`${term} : ok`)))
       .pipe(
         map((res) =>
           res.json().results.map((item) => {
@@ -56,6 +64,6 @@ export class SearchService {
           })
         )
       )
-      .pipe(retryWhen(this.retryStrategy(apiURL)));
+      .pipe(retryWhen(this.retryStrategy(term)));
   }
 }
