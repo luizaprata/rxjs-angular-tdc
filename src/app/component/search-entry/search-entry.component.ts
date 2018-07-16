@@ -44,12 +44,16 @@ export class SearchEntryComponent implements OnInit {
     this.statusRequests = log;
   }
   setStatus() {
-    if (this.logSubscription) this.logSubscription.unsubscribe();
+    if (this.logSubscription) {
+      this.logSubscription.unsubscribe();
+    }
     this.statusRequests = '';
   }
 
   setLog() {
-    if (this.logSubscription) this.logSubscription.unsubscribe();
+    if (this.logSubscription) {
+      this.logSubscription.unsubscribe();
+    }
     this.logRequestsText = '';
   }
   addLog(log) {

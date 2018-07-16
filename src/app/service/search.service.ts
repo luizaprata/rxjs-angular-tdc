@@ -17,37 +17,20 @@ export class SearchService {
     this.results = [];
   }
 
-  retryStrategy(term) {
-    let _self = this;
-    return function(error) {
-      return error
-        .pipe(
-          scan((acc, value) => {
-            _self.addLog(`${term} : falhou tentativa ${acc + 1} de 3`);
-            return acc + 1;
-          }, 0)
-        )
-        .pipe(takeWhile((acc) => acc < 3))
-        .pipe(delay(1500));
-    };
-  }
-
   addLog(msg) {
-    this.logCount++;
-    msg = `[${this.logCount}] ${msg}`
-    this.logTerm.next(msg);
     this.lastTerm.next(msg);
+    this.logTerm.next(msg);
   }
 
   search(term: string): Observable<SearchItem[]> {
-    const apiURL = `${this.apiRoot}?term=${term}&media=music&limit=20`;
-    this.addLog(`${term} : start request`);
+    const url = `${this.apiRoot}?term=${term}&media=music&limit=20`;
+    this.addLog(`"${term}" | start request`);
     return this.http
-      .get(apiURL)
-      .pipe(tap((_) => this.addLog(`${term} : ok`)))
+      .get(url)
+      .pipe(tap((_) => this.addLog(`"${term}" | status: 200`)))
       .pipe(
-        map((res) =>
-          res.json().results.map((item) => {
+        map((res) => {
+          return res.json().results.map((item) => {
             return new SearchItem(
               item.trackName,
               item.artistName,
@@ -55,9 +38,17 @@ export class SearchService {
               item.artworkUrl30,
               item.artistId
             );
-          })
-        )
+          });
+        })
       )
-      .pipe(retryWhen(this.retryStrategy(term)));
+      .pipe(
+        retryWhen((error) => {
+          const attempts = 3;
+          return error
+            .pipe(scan((acc, value) => acc + 1, 0))
+            .pipe(takeWhile((acc) => acc < attempts))
+            .pipe(delay(1500));
+        })
+      );
   }
 }
