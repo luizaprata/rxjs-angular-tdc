@@ -1,5 +1,18 @@
 <div class="row">
-  <div class="col-8">
+  <div class="col">
+    <button type="button" class="btn" (click)="onStatusRequests()">
+      <span *ngIf="showStatusRequests">Status Habilitado</span>
+      <span *ngIf="!showStatusRequests">Status Desabilitado</span>
+    </button>
+    <pre *ngIf="showStatusRequests">{{statusRequests}}</pre>
+    <hr/>
+    <button type="button" class="btn" (click)="onLogRequests()">
+      <span *ngIf="showLogRequests">Log Habilitado</span>
+      <span *ngIf="!showLogRequests">Log Desabilitado</span>
+    </button>
+    <pre *ngIf="showLogRequests">{{logRequestsText}}</pre>
+  </div>
+  <div class="col-xs-12 col-sm-8">
     <form class="card p-2">
       <div class="input-group">
         <input type="search" class="form-control" placeholder="Buscar" [formControl]="searchField">
@@ -20,18 +33,5 @@
       </li>
     </ul>
   </div>
-  <div class="col">
-    <button type="button" class="btn" (click)="onStatusRequests()">
-      <span *ngIf="showStatusRequests">Status Habilitado</span>
-      <span *ngIf="!showStatusRequests">Status Desabilitado</span>
-    </button>
-    <pre *ngIf="showStatusRequests">{{statusRequests}}</pre>
-    <hr/>
-    <button type="button" class="btn" (click)="onLogRequests()">
-      <span *ngIf="showLogRequests">Log Habilitado</span>
-      <span *ngIf="!showLogRequests">Log Desabilitado</span>
-    </button>
-    <pre *ngIf="showLogRequests">{{logRequestsText}}</pre>
 
-  </div>
 </div>

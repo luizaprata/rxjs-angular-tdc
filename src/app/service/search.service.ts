@@ -9,13 +9,14 @@ import { ReplaySubject, BehaviorSubject } from 'rxjs';
 export class SearchService {
   apiRoot: string = 'https://itunes.apple.com/search';
   results: SearchItem[];
-  logTerm = new ReplaySubject<string>(20);
-  lastTerm = new BehaviorSubject<string>('');
   logCount: number = 0;
 
   constructor(private http: Http) {
     this.results = [];
   }
+
+  lastTerm = new BehaviorSubject<string>('');
+  logTerm = new ReplaySubject<string>(20);
 
   addLog(msg) {
     this.lastTerm.next(msg);
@@ -23,8 +24,9 @@ export class SearchService {
   }
 
   search(term: string): Observable<SearchItem[]> {
+    const _self = this;
     const url = `${this.apiRoot}?term=${term}&media=music&limit=20`;
-    this.addLog(`"${term}" | start request`);
+    this.addLog(`"${term}" | inicia request`);
     return this.http
       .get(url)
       .pipe(tap((_) => this.addLog(`"${term}" | status: 200`)))
@@ -45,7 +47,14 @@ export class SearchService {
         retryWhen((error) => {
           const attempts = 3;
           return error
-            .pipe(scan((acc, value) => acc + 1, 0))
+            .pipe(
+              scan((acc, value) => {
+                _self.addLog(
+                  `"${term}" | nova tentativa ${acc + 1} de ${attempts}`
+                );
+                return acc + 1;
+              }, 0)
+            )
             .pipe(takeWhile((acc) => acc < attempts))
             .pipe(delay(1500));
         })
