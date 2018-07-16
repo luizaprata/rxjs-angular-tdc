@@ -11,6 +11,7 @@ export class SearchService {
   results: SearchItem[];
   logTerm = new ReplaySubject<string>(20);
   lastTerm = new BehaviorSubject<string>('');
+  logCount: number = 0;
 
   constructor(private http: Http) {
     this.results = [];
@@ -32,6 +33,8 @@ export class SearchService {
   }
 
   addLog(msg) {
+    this.logCount++;
+    msg = `[${this.logCount}] ${msg}`
     this.logTerm.next(msg);
     this.lastTerm.next(msg);
   }

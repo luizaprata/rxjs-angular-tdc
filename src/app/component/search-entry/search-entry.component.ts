@@ -21,23 +21,43 @@ export class SearchEntryComponent implements OnInit {
   private results: Observable<SearchItem[]>;
   private searchField: FormControl;
   private showLogRequests: boolean = false;
-  private logRequests: string = 'ola';
+  private logRequestsText: string;
   private logSubscription;
 
+  private showStatusRequests: boolean = false;
+  private statusRequests: string;
+  private statusSubscription;
+
   constructor(private itunes: SearchService) {
-    this.setLogStatus();
+    this.setLog();
+    this.setStatus();
   }
 
-  setLogStatus() {
+  onStatusRequests() {
+    this.showStatusRequests = !this.showStatusRequests;
+    this.setStatus();
+    this.statusSubscription = this.itunes.lastTerm.subscribe(
+      this.addStatus.bind(this)
+    );
+  }
+  addStatus(log) {
+    this.statusRequests = log;
+  }
+  setStatus() {
     if (this.logSubscription) this.logSubscription.unsubscribe();
-    this.logRequests = '';
+    this.statusRequests = '';
+  }
+
+  setLog() {
+    if (this.logSubscription) this.logSubscription.unsubscribe();
+    this.logRequestsText = '';
   }
   addLog(log) {
-    this.logRequests = `${log}\n${this.logRequests}`;
+    this.logRequestsText = `${log}\n${this.logRequestsText}`;
   }
   onLogRequests() {
     this.showLogRequests = !this.showLogRequests;
-    this.setLogStatus();
+    this.setLog();
     this.logSubscription = this.itunes.logTerm.subscribe(
       this.addLog.bind(this)
     );

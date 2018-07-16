@@ -21,10 +21,17 @@
     </ul>
   </div>
   <div class="col">
+    <button type="button" class="btn" (click)="onStatusRequests()">
+      <span *ngIf="showStatusRequests">Status Habilitado</span>
+      <span *ngIf="!showStatusRequests">Status Desabilitado</span>
+    </button>
+    <pre *ngIf="showStatusRequests">{{statusRequests}}</pre>
+    <hr/>
     <button type="button" class="btn" (click)="onLogRequests()">
       <span *ngIf="showLogRequests">Log Habilitado</span>
       <span *ngIf="!showLogRequests">Log Desabilitado</span>
     </button>
-    <pre *ngIf="showLogRequests">{{logRequests}}</pre>
+    <pre *ngIf="showLogRequests">{{logRequestsText}}</pre>
+
   </div>
 </div>
