@@ -1,37 +1,38 @@
-<div class="row">
-  <div class="col-8">
-    <form class="card p-2">
-      <div class="input-group">
-        <input type="search" class="form-control" placeholder="Buscar" [formControl]="searchField">
-      </div>
-    </form>
-    <hr/>
-    <div class="text-center">
-      <p class="lead" *ngIf="loading">Loading...</p>
+<div class="search-container">
+  <form class="card p-2">
+    <div class="input-group">
+      <input type="search" class="form-control" placeholder="Buscar" [formControl]="searchField">
     </div>
-    <ul class="list-group mb-3">
-      <li class="list-group-item" *ngFor="let track of results | async">
-        <div class="media lh-condensed">
-          <img class="align-self-start mr-3" src="{{track.thumbnail}}" alt="Generic placeholder image">
-          <div class="media-body">
-            <a target="_blank" class="badge badge-light wrap" href="{{track.link}}">{{track.track}}</a>
-          </div>
-        </div>
-      </li>
-    </ul>
+  </form>
+  <hr/>
+  <div class="text-center">
+    <p class="lead" *ngIf="loading">Loading...</p>
   </div>
+  <ul class="list-group mb-3">
+    <li class="list-group-item" *ngFor="let track of results | async">
+      <div class="media lh-condensed">
+        <img class="align-self-start mr-3" src="{{track.thumbnail}}" alt="Generic placeholder image">
+        <div class="media-body">
+          <a target="_blank" class="badge badge-light wrap" href="{{track.link}}">{{track.track}}</a>
+        </div>
+      </div>
+    </li>
+  </ul>
+</div>
+<hr>
+<div class="row">
   <div class="col">
     <button type="button" class="btn" (click)="onStatusRequests()">
       <span *ngIf="showStatusRequests">Status Habilitado</span>
       <span *ngIf="!showStatusRequests">Status Desabilitado</span>
     </button>
     <pre *ngIf="showStatusRequests">{{statusRequests}}</pre>
-    <hr/>
+  </div>
+  <div class="col">
     <button type="button" class="btn" (click)="onLogRequests()">
       <span *ngIf="showLogRequests">Log Habilitado</span>
       <span *ngIf="!showLogRequests">Log Desabilitado</span>
     </button>
     <pre *ngIf="showLogRequests">{{logRequestsText}}</pre>
-
   </div>
 </div>

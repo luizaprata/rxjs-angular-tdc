@@ -2,5 +2,11 @@
   white-space: normal;
 }
 pre {
-  max-width: 350px;
+  max-width: 194px;
+  margin-top: 8px;
+}
+
+.search-container{
+  height: 500px;
+  overflow-y: auto;
 }
