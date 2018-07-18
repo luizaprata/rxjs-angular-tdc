@@ -1,13 +1,40 @@
+<<<<<<< HEAD
 <div class="search-container">
   <form class="card p-2">
     <div class="input-group">
       <input type="search" class="form-control" placeholder="Buscar" [formControl]="searchField">
+=======
+<div class="row">
+  <div class="col">
+    <button type="button" class="btn" (click)="onStatusRequests()">
+      <span *ngIf="showStatusRequests">Status Habilitado</span>
+      <span *ngIf="!showStatusRequests">Status Desabilitado</span>
+    </button>
+    <pre *ngIf="showStatusRequests">{{statusRequests}}</pre>
+    <hr/>
+    <button type="button" class="btn" (click)="onLogRequests()">
+      <span *ngIf="showLogRequests">Log Habilitado</span>
+      <span *ngIf="!showLogRequests">Log Desabilitado</span>
+    </button>
+    <pre *ngIf="showLogRequests">{{logRequestsText}}</pre>
+  </div>
+  <div class="col-xs-12 col-sm-8">
+    <form class="card p-2">
+      <div class="input-group">
+        <input type="search" class="form-control" placeholder="Buscar" [formControl]="searchField">
+      </div>
+    </form>
+    <hr/>
+    <div class="text-center">
+      <p class="lead" *ngIf="loading">Loading...</p>
+>>>>>>> 5b60d753ad36d0d80de56d7ebff8a5dafd6aa0e5
     </div>
   </form>
   <hr/>
   <div class="text-center">
     <p class="lead" *ngIf="loading">Loading...</p>
   </div>
+<<<<<<< HEAD
   <ul class="list-group mb-3">
     <li class="list-group-item" *ngFor="let track of results | async">
       <div class="media lh-condensed">
@@ -35,4 +62,7 @@
     </button>
     <pre *ngIf="showLogRequests">{{logRequestsText}}</pre>
   </div>
+=======
+
+>>>>>>> 5b60d753ad36d0d80de56d7ebff8a5dafd6aa0e5
 </div>

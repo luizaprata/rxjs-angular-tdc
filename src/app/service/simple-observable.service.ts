@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { from } from 'rxjs';
-import { map, filter } from 'rxjs/operators';
+import { from, Observer } from 'rxjs';
+import { map, filter, catchError } from 'rxjs/operators';
+import { Observable } from 'rxjs/internal/Observable';
 
-export class MyObserver {
+export class MyObserver implements Observer<number> {
   next(value) {
     console.log('next', value);
   }
@@ -19,25 +20,35 @@ export class MyObserver {
 })
 export class SimpleObservableService {
   constructor() {
-    let numbers = [10, 31, 42];
-    //let source = Observable.create((observer) => {
-    //  for (let n of numbers) {
-    //    if (n === 31) {
-    //      observer.error('Deu ruim!');
-    //    }
-    //    observer.next(n);
-    //  }
-    //  observer.complete();
-    //});
-
-    let source = from(numbers)
+    const numbers = [10, 31, 42];
+    const source = Observable.create((observer) => {
+      for (const n of numbers) {
+        if (n === 42) {
+          observer.error('Deu ruim!');
+        }
+        observer.next(n);
+      }
+      observer.complete();
+    });
+    source
       .pipe(filter((value) => value > 30))
-      .pipe(map((value) => value * 2));
+      .pipe(map((value: number) => value * 2));
+
     source.subscribe(
       (value) => console.log('next', value),
       (e) => console.log('error', e),
       () => console.log('complete')
     );
-    
+
+    const source2 = from(numbers);
+    source2
+      .pipe(filter((value) => value > 30))
+      .pipe(map((value: number) => value * 2));
+
+    source2.subscribe(
+      (value) => console.log('next', value),
+      (e) => console.log('error', e),
+      () => console.log('complete')
+    );
   }
 }

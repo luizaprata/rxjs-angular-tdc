@@ -9,18 +9,16 @@ import { BehaviorSubject, ReplaySubject } from 'rxjs';
 export class SearchService {
   api: string = 'https://itunes.apple.com/search';
   results: SearchItem[];
-  
-  
 
   constructor(private http: Http) {
     this.results = [];
   }
-  
+
   logCount: number = 0;
 
   logTerm = new ReplaySubject<string>(5);
   lastTerm = new BehaviorSubject<string>('');
-  
+
   addLog(msg) {
     let count = this.logCount++;
     this.logTerm.next(`[${count}] ${msg}`);
@@ -31,10 +29,12 @@ export class SearchService {
     let _self = this;
     return function(error) {
       return error
-        .pipe(scan((acc, value) => {
-          _self.addLog(`${term} : tentativa ${acc}`)
-          return acc + 1;
-        }, 0))
+        .pipe(
+          scan((acc, value) => {
+            _self.addLog(`${term} : tentativa ${acc}`);
+            return acc + 1;
+          }, 0)
+        )
         .pipe(takeWhile((acc) => acc < 3))
         .pipe(delay(1500));
     };
@@ -42,14 +42,13 @@ export class SearchService {
 
   search(term: string): Observable<SearchItem[]> {
     const url = `${this.api}?term=${term}&media=music`;
-    this.addLog(`${term} : inicia request`)
+    this.addLog(`${term} : inicia request`);
     return this.http
       .get(url)
-      .pipe(tap((_)=> this.addLog(`${term} : sucesso`)))
-      .pipe(map((res) => 
-        res.json().results.map((item) => 
-          new SearchItem(item))
-      ))
+      .pipe(tap((_) => this.addLog(`${term} : sucesso`)))
+      .pipe(
+        map((res) => res.json().results.map((item) => new SearchItem(item)))
+      )
       .pipe(retryWhen(this.retryStrategy(term)));
   }
 }
